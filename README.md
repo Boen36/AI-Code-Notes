@@ -1,0 +1,1 @@
+关于各类主流AI codeing的学习笔记。例如Kiro，Claude Code，主要学习它们的设计思想，以及与AI交互的心得。
