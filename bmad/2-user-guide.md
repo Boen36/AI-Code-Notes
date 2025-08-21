@@ -70,3 +70,22 @@ graph TD
             Scrum Master"]
 
 ```
+
+#### Web UI 规划阶段到 IDE 的过渡
+
+**关键转折点**: 一旦PO确认了文档对齐没有问题之后，就必须从 Web UI 切换到 IDE 中的开发流程了:
+
+1. 将 prd 和 architecture 复制到项目的docs目录，也可以在安装的时候指定自定义的目录
+2. 在 IDE 让 PO 对 PRD 和 architecture 文档进行切片
+3. 开始进行开发流程
+
+#### 规划阶段的产物/工件
+
+```text
+PRD             -> docs/prd.md
+Architecture    -> docs/architecture.md
+Sharded Epics   -> docs/epics/
+Sharded Stories -> docs/stories/
+QA Assessments  -> docs/qa/assessments/ 过程质量报告
+QA Gates        -> docs/qa/gates/ 发布前的许可证，质量门
+```
