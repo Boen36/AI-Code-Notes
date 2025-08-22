@@ -157,3 +157,54 @@ graph TD
 ```
 
 ### BMad 有两个特殊的agent
+
+#### BMad Master
+
+IDE中万能的BMad agent，拥有所有agent的能力，不建议使用，可能造成大量的上下文开销
+
+#### BMad Orchestrator
+
+在 Web UI 中践行 BMad Method，是一个重量级的agent，随时能变换为别的agent
+
+### BMad 中的 agents 是如何工作的?
+
+#### 依赖管理系统
+
+每个agent都有一个使用yaml语法生命的依赖清单
+
+```yaml
+dependencies:
+  templates: // task 使用哪些模版来生成最后的文档
+    - prd-template.md
+    - user-story-template.md
+  tasks: // 真正干活的命令
+    - create-doc.md
+    - shard-doc.md
+  data: // 公共识库，可以理解为BMad内部的百科全书
+    - bmad-kb.md // kb 是 knowledge base 知识库的缩写
+```
+
+**要点速记**
+
+- agent 按需加载它们的资源，来保持精简的上下文
+- 在打包的时候自动管理依赖，自动拉取需要的模板和知识库
+- 资源通过在agents之间分享，保证了资源的一致性
+
+#### 与 Agent 进行交互
+
+**在IDE中**
+
+```bash
+# 在Cursor这些IDE中，可以使用@符号来与agent进行交互
+@pm Create a PRD for a task management app
+@architect design the system architecture
+@dev implement the user authentication
+# 在Claude Code中，使用/符号来进行交互
+/pm create user stories
+/dev fix the login bug
+```
+
+#### 交互模式
+
+- 渐进模式：每一步都需要用户的输入确认
+- YOLO(极速)模式: 以最少的交互快速生成并完成任务
