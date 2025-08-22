@@ -89,3 +89,69 @@ Sharded Stories -> docs/stories/
 QA Assessments  -> docs/qa/assessments/ 过程质量报告
 QA Gates        -> docs/qa/gates/ 发布前的许可证，质量门
 ```
+
+### The Core Development Cycle (IDE)
+
+规划阶段完成，并且文档被切片，BMad 接下来进入一个结构化的开发工作流
+
+```mermaid
+graph TD
+  A["开始进入开发阶段"] --> B["SM:回顾上一条Story的开发
+                                和QA的备注"]
+  B --> B2["SM:草拟下一条Story
+              根据拆好的Epics和系统架构"]
+  B2 --> S{"Story是否高风险？
+            (可选)"}
+  S --> |Yes| T["QA: 对草拟的Story
+                  用risk和design命令
+                  risk评估实现风险
+                  design制定测试策略"]
+  S --> |No| B3
+  T --> U["创建测试策略和风险画像
+            risk profile"]
+  U --> B3{"PO:是否再次检查草拟的
+              Story(可选)"}
+  B3 --> |再次检查| B4["PO:再次检查Story
+                        使用规划阶段的产物"]
+  B3 --> |跳过检查| C{"Story负责人是否拍板"}
+  B4 --> C
+  C --> |需要修改| B2
+  C --> |确认没问题| D["Dev:按序执行任务"]
+  D --> E["Dev:完成任务并测试"]
+  E --> V{"开发途中是否需要QA检查?
+            (可选)主要针对高风险任务"}
+  V --> |No| F["Dev:执行全部校验"]
+  V --> |Yes| W["QA:执行trace和nfr命令
+                  trace对任务测试进行跟踪
+                  nfr非功能性验证"]
+  W --> X["Dev:填补没有覆盖的测试和
+                没有达到的非功能性需求
+                根据QA中途的反馈改进"]
+  X --> F
+  F --> G["Dev:标记任务为待评审
+                附上自测记录、改动要点、
+                已知风险等备注"]
+  G --> H{"需求提出者或PO进行验证"}
+  H --> |跳过QA直接通过| M["务必确认:
+                          所有回归测试和
+                          代码审查都必须通过
+                          回归测试保证老功能正常
+                          Linting保证代码符合规范"]
+  H --> |请求QA评审| I["QA:根据测试框架评审
+                          并通过Quality Gate"]
+  I --> J["QA:分析并主动重构测试框架
+            根据实际测试结果
+            及时调整测试方案"]
+  J --> L{"QA是否允许通过"}
+  L --> |通过| M
+  L --> |需要开发调整| D
+  H --> |需要调整修复| D
+  M --> N["务必确认:将所有改动提交
+                    再进行下一个任务"]
+  N --> Y{"之前测试给出的
+          质量门结论是否需要更新"}
+  Y --> |Yes| Z["QA:使用gate命令更新状态"]
+  Y --> |No| K
+  Z --> K["将该Story标记为完成"]
+  K --> B
+```
