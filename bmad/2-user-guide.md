@@ -155,3 +155,5 @@ graph TD
   Z --> K["将该Story标记为完成"]
   K --> B
 ```
+
+### BMad 有两个特殊的agent

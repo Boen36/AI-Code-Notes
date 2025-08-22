@@ -2,6 +2,17 @@
 
 智能体驱动的敏捷开发
 
+## 为什么要叫 BMad
+
+BMad - Behavior Model Assisted Deveplopment
+
+- Behavior 对应敏捷开发中的一系列行为
+- Model
+- Assisted 强调人主动整个流程，AI协助
+- Development
+
+不要mad，让BMad帮你把规划，测试，开发，质量门都自动化，开发者只需关注核心逻辑
+
 ## BMAD 的两项重大创新
 
 1. Agentic Planning
