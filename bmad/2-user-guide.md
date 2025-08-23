@@ -441,3 +441,35 @@ Quinn 强制执行的测试质量原则:
 - 质量门透明: 及时地和团队分享质量门的决定
 - 持续学习: QA 把踩坑模式写成文档，在团队间分享经验
 - 关注遗留代码: 对遗留代码需要额外关注回归风险
+
+## 技术偏好系统
+
+BMad 内置个性化系统，只要把偏好写进`.bmad-core/data/technical-preferences.md`，PM 和 架构师就会按照你指定的设计模式，技术选型，代码规范给出建议
+
+## 核心配置
+
+`bmad-core/core-config.yaml` BMad的核心配置文件，可以让BMad无缝地在不同项目中使用，目前最关的是`devLoadAlwaysFiles`
+
+
+### 开发者上下文
+
+定义了dev agent需要加载的文件
+
+```yaml
+devLoadAlwaysFiles:
+  - docs/architecture/coding-standards.md
+  - docs/architecture/tech-stack.md
+  - docs/architecture/project-structure.md
+```
+
+在把架构文档拆片之后，请立即检查这三件事:
+
+1. 这些`devLoadAlwaysFiles`中指定的文件都存在
+2. 每份文件都足够精简，只保留真正必须遵守的原则
+3. 文件内容是你希望开发代理每次启动都强制读进上下文的那部分，它会把这些规则当作铁律执行
+
+随着项目成熟，代码风格趋于一致，编码规范文件要越做越薄.只留下哪些仍需硬性遵守的规则，其余通通删掉，开发代理会自动扫码当前文件周边的代码，推断出与本次任务相关的约定，可以很好的节省上下文
+
+## 总结
+
+**记住**, BMad是为了加强你的开发阶段而设计的，并不是为了取代你的专业知识，把它当成加速你项目的强大的工具，同时你又能掌控设计和实现的细节
