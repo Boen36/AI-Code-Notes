@@ -324,3 +324,71 @@ test_summary:
 - 识别出测试不足的地方，并按严重程度打分
 - 创建可追溯矩阵，方便后续审计
   可追溯矩阵可以连接理解为需求-测试-结果的对照表，记录每个需求对应的测试文件/用例，以及最终的测试结果
+
+#### 4. NFR Assessment 非功能性需求评估 (*nfr)
+
+**When**: 开发过程中或者早期评审阶段 (验证各项质量属性)
+
+验证以下非功能性需求:
+
+- 最核心的四项: 安全Security，性能Performance，可靠性Reliability，可维护性Maintainability
+- 证据优先: 必须提供实际代码，配置或测试结果作为证明，让每一项测试都可追溯，可复现
+- 质量门联动: 任何NFR测试不合格，都会直接影响质量门的结果
+
+#### 5. Comprehensive Test Architecture Review (*review) 全面的测试架构评审
+
+当开发完成，Story标记为待评审
+
+当你执行`@qa *review {story}`:
+
+- 需求可追溯性: 将每条验收准则与实际的测试映射
+- 分析测试等级: 确认单元，集成，端到端三个层级都安排了合适且足够的测试
+- 测试覆盖评估: 找出漏测的和重复测的
+- 主动重构: 如果安全的话会直接提升代码质量
+- 质量门判定: 根据评审结果直接给出PASS/CONCERNS/FAIL 三种状态
+
+#### 6. Quality Gates (*gate)
+
+修复评审意见后，或需要更新质量门状态时，需要使用该命令
+
+管理质量门决策:
+
+- 明确规则: PASS/FAIL/CONCERNS 判定标准一目了然
+- 并行权限: QA 独立掌控 docs/qa/gates 下的文件，拥有单独的权限
+- 建议性质: 只给结论和建议，不强制阻塞流程
+- 支持豁免: 可以根据需要记录可以被接受的风险
+
+**注意** 质量门只是建议，团队可自行设置质量门槛，若想豁免，必须写清楚：原因，批注人，到期日
+
+### Working with Test Architect
+
+#### 与 BMad 工作流集成
+
+测试工程师在整个开发生命周期中都发挥了价值。下面介绍什么时候，怎么用每个能力:
+
+| **Stage**               |  **Command**  | **When to Use**             | **Value**                 | **Output**                                                     |
+| ----------------------- |  -----------  | --------------------------- | ------------------------- | -------------------------------------------------------------- |
+| **Story Drafting**      |   `*risk`     | 在SM草拟Story之后             | 尽早识别各种坑              | `docs/qa/assessments/{epic}.{story}-risk-{YYYYMMDD}.md`         |
+|                         |   `*design`   | 风险评估之后                  | 指导测试策略的开发           | `docs/qa/assessments/{epic}.{story}-test-design-{YYYYMMDD}.md`  |
+| **开发阶段**              |   `*trace`    | 开发期间                     | 验证测试覆盖率              | `docs/qa/assessments/{epic}.{story}-trace-{YYYYMMDD}.md`        |
+|                         |   `*nfr`      | 构建功能的时候                 | 早些发现质量问题            | `docs/qa/assessments/{epic}.{story}-nfr-{YYYYMMDD}.md`           |
+| **评审**                 |   `*review`   | 当Story标记为已完成时          | 全面的质量评估              | 在 story 和 gate 文件中的 QA 评审结果                              |
+| **评审结束后**            |   `*gate`     | 修复问题以后                  | 更新质量评估结果            | 经过更新的 `docs/qa/gates/{epic}.{story}-{slug}.md`               |
+
+命令示例:
+
+```bash
+# 规划阶段 - 在开发之前运行这些命令
+@qa *risk {draft-story} # 有什么是容易做错的？
+@qa *design {draft-story} # 我们应该有哪些测试
+
+# 开发阶段 - 在编码的过程中使用这些命令
+@qa *trace {story} # 是否完成了所有的测试
+@qa *nfr {story} # 是否满足了质量标准
+
+# 评审阶段 - 当开发完成
+@qa *review {story} # 全面的评估和重构
+
+# 评审之后 - 在指出问题之后
+@qa *gate {story} # 更新质量门状态
+```
